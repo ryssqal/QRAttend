@@ -79,8 +79,8 @@ class ClientController extends Controller
     public function downloadQr($eventId)
     {
         $event = Event::where('id', $eventId)
-                     ->where('user_id', Auth::id())
-                     ->firstOrFail();
+                    ->where('user_id', Auth::id())
+                    ->firstOrFail();
 
         if (!$event->qr_code_path || !Storage::disk('public')->exists($event->qr_code_path)) {
             abort(404);
