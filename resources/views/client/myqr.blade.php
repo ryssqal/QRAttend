@@ -27,7 +27,7 @@
                 <div class="flex items-center space-x-8">
                     <a href="/client/home" class="text-gray-600 hover:text-blue-600">Home</a>
                     <a href="/client/myqr" class="text-gray-900 hover:text-blue-600 font-medium">MyQR</a>
-                    <a href="/contact" class="text-gray-600 hover:text-blue-600">Contact Us</a>
+                    <a href="/client/contact" class="text-gray-600 hover:text-blue-600">Contact Us</a>
                 </div>
             </div>
         </div>

@@ -16,22 +16,7 @@
 </head>
 <body class="antialiased bg-gray-50">
     <!-- Navigation -->
-    <nav class="bg-white shadow-sm border-b">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16">
-                <div class="flex items-center">
-                    <div class="flex-shrink-0">
-                        <h1 class="text-xl font-bold text-gray-900">QRAttend</h1>
-                    </div>
-                </div>
-                <div class="flex items-center space-x-8">
-                    <a href="/client/home" class="text-gray-600 hover:text-blue-600">Home</a>
-                    <a href="/client/myqr" class="text-gray-600 hover:text-blue-600">MyQR</a>
-                    <a href="/client/contact" class="text-gray-900 hover:text-blue-600 font-medium">Contact Us</a>
-                </div>
-            </div>
-        </div>
-    </nav>
+    @include('partials.navbar')
 
     <!-- Hero Section -->
     <section class="bg-gradient-to-r from-blue-600 to-purple-700 text-white py-20">
