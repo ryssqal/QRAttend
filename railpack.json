@@ -1,5 +1,11 @@
 {
   "php": {
     "document_root": "public"
+  },
+  "healthcheck": {
+    "path": "/"
+  },
+  "variables": {
+    "DB_CONNECTION": "mysql"
   }
 }
