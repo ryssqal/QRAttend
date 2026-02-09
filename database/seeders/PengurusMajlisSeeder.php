@@ -16,10 +16,19 @@ class PengurusMajlisSeeder extends Seeder
      */
     public function run(): void
     {
-        PengurusMajlis::create([
-            'name' => 'Faizul',
+        PengurusMajlis::firstOrCreate([
             'email' => 'faizul@gmail.com',
+        ], [
+            'name' => 'Faizul',
             'password' => Hash::make('faizul123'),
+            'role' => 'pengurusMajlis',
+        ]);
+
+        PengurusMajlis::firstOrCreate([
+            'email' => 'newpengurus@gmail.com',
+        ], [
+            'name' => 'New Pengurus',
+            'password' => Hash::make('password123'),
             'role' => 'pengurusMajlis',
         ]);
     }
