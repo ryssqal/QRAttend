@@ -24,7 +24,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center">
                 <h1 class="text-4xl md:text-6xl font-bold mb-6">
-                    Effortless Event Attendance with QR Codes HELLO HELLO HELLO
+                    Effortless Event Attendance with QR Codes
                 </h1>
                 <p class="text-xl md:text-2xl mb-8 text-blue-100">
                     Generate QR codes, track attendance in real-time, and get detailed reports for your events.
