@@ -44,6 +44,10 @@ return [
             'driver' => 'session',
             'provider' => 'pengurusMajlis',
         ],
+        'admin' => [
+            'driver' => 'session',
+            'provider' => 'admins',
+        ],
     ],
 
     /*
@@ -72,6 +76,10 @@ return [
         'pengurusMajlis' => [
             'driver' => 'eloquent',
             'model' => App\Models\PengurusMajlis::class,
+        ],
+        'admins' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Admin::class,
         ],
 
         // 'users' => [
