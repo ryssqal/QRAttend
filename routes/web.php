@@ -7,6 +7,8 @@ use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\PengurusMajlisController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Admin\AdminAuthController;
+use App\Http\Controllers\Admin\AdminDashboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -102,4 +104,30 @@ Route::middleware(['auth:pengurusMajlis', 'role:pengurusMajlis'])->group(functio
         ->name('pengurusMajlis.profile.edit');
     Route::post('/pengurusMajlis/profile', [ProfileController::class, 'update'])
         ->name('pengurusMajlis.profile.update');
+});
+
+/*
+|--------------------------------------------------------------------------
+| Admin Routes
+|--------------------------------------------------------------------------
+*/
+Route::prefix('admin')->group(function () {
+
+    // Papar login admin
+    Route::get('/', [AdminAuthController::class, 'showLogin'])
+        ->name('admin.login');
+
+    // Proses login admin
+    Route::post('/login', [AdminAuthController::class, 'login'])
+        ->name('admin.login.submit');
+
+    // Admin protected routes
+    Route::middleware('admin')->group(function () {
+        Route::get('/dashboard', [AdminDashboardController::class, 'index'])
+            ->name('admin.dashboard');
+
+        Route::post('/logout', [AdminAuthController::class, 'logout'])
+            ->name('admin.logout');
+    });
+
 });
