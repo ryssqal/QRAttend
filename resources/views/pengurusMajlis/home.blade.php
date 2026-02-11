@@ -176,24 +176,27 @@
             </div>
 
             <!-- Event Cards Grid -->
+             @php use Illuminate\Support\Str; @endphp
+
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 @forelse($events ?? [] as $event)
                 <div class="bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition duration-300">
                     <!-- Event Banner -->
                     <div class="h-48 bg-gradient-to-r from-blue-400 to-purple-500 flex items-center justify-center">
                         @if($event->media_path)
-                            @if(strpos($event->media_path, '.mp4') !== false)
+                            @if(Str::endsWith($event->media_path, '.mp4'))
                                 <video class="w-full h-full object-cover" controls>
-                                    <source src="{{ Storage::url($event->media_path) }}" type="video/mp4">
+                                    <source src="{{ asset('uploads/' . $event->media_path) }}" type="video/mp4">
                                 </video>
                             @else
-                                <img src="{{ Storage::url($event->media_path) }}" alt="{{ $event->title }}" class="w-full h-full object-cover">
+                                <img 
+                                    src="{{ asset('uploads/' . $event->media_path) }}" 
+                                    alt="{{ $event->title }}" 
+                                    class="w-full h-full object-cover"
+                                >
                             @endif
-                        @else
-                            <svg class="w-16 h-16 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                            </svg>
                         @endif
+
                     </div>
 
                     <!-- Event Details -->
