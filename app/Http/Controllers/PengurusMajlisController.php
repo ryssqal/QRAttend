@@ -59,9 +59,19 @@ class PengurusMajlisController extends Controller
         }
 
         $mediaPath = null;
+
         if ($request->hasFile('media')) {
-            $mediaPath = $request->file('media')->store('events', 'public');
+            $file = $request->file('media');
+
+            $filename = time() . '_' . $file->getClientOriginalName();
+
+            // simpan fail ke public/uploads
+            $file->move(public_path('uploads'), $filename);
+
+            // SIMPAN NAMA FAIL SAHAJA
+            $mediaPath = $filename;
         }
+
 
         $event = Event::create([
             'title' => $request->title,
@@ -112,11 +122,13 @@ class PengurusMajlisController extends Controller
         $mediaPath = $event->media_path; // Keep existing media by default
         if ($request->hasFile('media')) {
             // Delete old media if exists
-            if ($event->media_path && Storage::disk('public')->exists($event->media_path)) {
-                Storage::disk('public')->delete($event->media_path);
+            if ($event->media_path && file_exists(public_path($event->media_path))) {
+                unlink(public_path($event->media_path));
             }
             // Store new media
-            $mediaPath = $request->file('media')->store('events', 'public');
+            $filename = time() . '_' . $request->file('media')->getClientOriginalName();
+            $request->file('media')->move(public_path('uploads'), $filename);
+            $mediaPath = 'uploads/' . $filename;
         }
 
         $event->update([
@@ -140,8 +152,8 @@ class PengurusMajlisController extends Controller
                      ->firstOrFail();
 
         // Delete associated media file if exists
-        if ($event->media_path && Storage::disk('public')->exists($event->media_path)) {
-            Storage::disk('public')->delete($event->media_path);
+        if ($event->media_path && file_exists(public_path($event->media_path))) {
+            unlink(public_path($event->media_path));
         }
 
         // Delete the event (this will cascade delete related records due to foreign keys)
