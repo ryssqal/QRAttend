@@ -57,7 +57,7 @@
                 <div class="bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition duration-300">
                     <div class="h-48 bg-gradient-to-r from-blue-200 to-purple-300 flex items-center justify-center">
                         @if($event->media_path)
-                        <img src="{{ asset('uploads/', $event->media_path) }}" alt="{{ $event->title }}" class="w-full h-full object-cover">
+                        <img src="{{ asset('uploads/'. $event->media_path) }}" alt="{{ $event->title }}" class="w-full h-full object-cover">
                         @else
                         <svg class="w-16 h-16 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
