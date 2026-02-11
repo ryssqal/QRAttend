@@ -20,20 +20,20 @@
     @include('partials.navbar')
 
     <!-- Hero Section -->
-    <section class="bg-gradient-to-r from-blue-600 to-purple-700 text-white py-20">
+    <section class="bg-gradient-to-r from-blue-200 to-purple-300 text-gray-900 py-20">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center">
                 <h1 class="text-4xl md:text-6xl font-bold mb-6">
                     Effortless Event Attendance with QR Codes
                 </h1>
-                <p class="text-xl md:text-2xl mb-8 text-blue-100">
+                <p class="text-xl md:text-2xl mb-8 text-purple-700">
                     Generate QR codes, track attendance in real-time, and get detailed reports for your events.
                 </p>
                 <div class="flex flex-col sm:flex-row gap-4 justify-center">
                     <a href="/client/myqr" class="bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition duration-300">
                         Get Started
                     </a>
-                    <a href="#events" class="border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-blue-600 transition duration-300">
+                    <a href="#events" class="border-2 border-gray-900 text-gray-900 px-8 py-3 rounded-lg font-semibold hover:bg-gray-900 hover:text-white transition duration-300">
                         Learn More
                     </a>
                 </div>
@@ -55,9 +55,9 @@
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
                 @forelse($activeEvents as $event)
                 <div class="bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition duration-300">
-                    <div class="h-48 bg-gradient-to-r from-blue-400 to-purple-500 flex items-center justify-center">
+                    <div class="h-48 bg-gradient-to-r from-blue-200 to-purple-300 flex items-center justify-center">
                         @if($event->media_path)
-                        <img src="{{ asset('storage/' . $event->media_path) }}" alt="{{ $event->title }}" class="w-full h-full object-cover">
+                        <img src="{{ asset('uploads/', $event->media_path) }}" alt="{{ $event->title }}" class="w-full h-full object-cover">
                         @else
                         <svg class="w-16 h-16 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
@@ -150,13 +150,13 @@
     </div>
 
     <!-- Footer -->
-    <footer class="bg-gray-900 text-white py-8">
+    <footer class="bg-gray-100 text-gray-900 py-8">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center">
                 <h3 class="text-xl font-bold mb-2">QRAttend</h3>
-                <p class="text-gray-400">Making event attendance management effortless.</p>
+                <p class="text-gray-600">Making event attendance management effortless.</p>
                 <div class="mt-4">
-                    <a href="/contact" class="text-gray-400 hover:text-white">Contact Us</a>
+                    <a href="/contact" class="text-gray-600 hover:text-gray-900">Contact Us</a>
                 </div>
             </div>
         </div>
