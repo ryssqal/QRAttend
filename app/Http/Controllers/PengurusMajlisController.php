@@ -66,7 +66,7 @@ class PengurusMajlisController extends Controller
             $filename = time() . '_' . $file->getClientOriginalName();
 
             // simpan fail ke public/uploads
-            $file->move(public_path('storage/events'), $filename);
+            $file->move(public_path('/uploads'), $filename);
 
             // SIMPAN NAMA FAIL SAHAJA
             $mediaPath = $filename;
