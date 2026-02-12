@@ -3,6 +3,16 @@
 @section('content')
 <h1 class="text-xl font-bold mb-4">Tambah Pengurus Majlis</h1>
 
+@if ($errors->any())
+    <div class="bg-red-100 text-red-700 p-2 mb-4">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
+
 <form method="POST" action="{{ route('admin.event-managers.store') }}">
     @csrf
 

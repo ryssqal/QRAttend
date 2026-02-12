@@ -8,6 +8,12 @@
    + Tambah Pengurus
 </a>
 
+@if (session('success'))
+    <div class="bg-green-100 text-green-700 p-2 mt-2 mb-4">
+        {{ session('success') }}
+    </div>
+@endif
+
 <table class="mt-4 w-full border">
     <tr class="bg-gray-100">
         <th class="border p-2">Nama</th>

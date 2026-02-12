@@ -9,17 +9,20 @@ use Illuminate\Support\Facades\Hash;
 
 class EventManagerController extends Controller
 {
+    // Senarai Pengurus Majlis
     public function index()
     {
         $managers = EventManager::all();
         return view('admin.event_managers.index', compact('managers'));
     }
 
+    // Papar borang tambah pengurus
     public function create()
     {
-        return view('admin.event_managers.create');
+        return view('admin.event_managers.create'); // underscore folder
     }
 
+    // Simpan data baru
     public function store(Request $request)
     {
         $request->validate([
@@ -39,3 +42,4 @@ class EventManagerController extends Controller
             ->with('success', 'Pengurus Majlis berjaya ditambah');
     }
 }
+

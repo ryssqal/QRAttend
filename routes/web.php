@@ -118,7 +118,7 @@ Route::prefix('admin')->group(function () {
     Route::get('/', [AdminAuthController::class, 'showLogin'])->name('admin.login');
     Route::post('/login', [AdminAuthController::class, 'login'])->name('admin.login.submit');
 
-    // Protected routes
+    // Protected routes for admin
     Route::middleware('admin')->group(function () {
 
         // Dashboard
@@ -128,8 +128,13 @@ Route::prefix('admin')->group(function () {
         Route::post('/logout', [AdminAuthController::class, 'logout'])->name('admin.logout');
 
         // Event Managers
-        Route::get('/event-managers', [EventManagerController::class, 'index'])->name('admin.event-managers.index');
-        Route::get('/event-managers/create', [EventManagerController::class, 'create'])->name('admin.event-managers.create');
-        Route::post('/event-managers', [EventManagerController::class, 'store'])->name('admin.event-managers.store');
+        Route::get('/event-managers', [EventManagerController::class, 'index'])
+            ->name('admin.event-managers.index');
+
+        Route::get('/event-managers/create', [EventManagerController::class, 'create'])
+            ->name('admin.event-managers.create');
+
+        Route::post('/event-managers', [EventManagerController::class, 'store'])
+            ->name('admin.event-managers.store');
     });
 });
