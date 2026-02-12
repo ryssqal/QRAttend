@@ -9,6 +9,7 @@ use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\AdminAuthController;
 use App\Http\Controllers\Admin\AdminDashboardController;
+use App\Http\Controllers\Admin\EventManagerController;
 
 /*
 |--------------------------------------------------------------------------
@@ -113,21 +114,22 @@ Route::middleware(['auth:pengurusMajlis', 'role:pengurusMajlis'])->group(functio
 */
 Route::prefix('admin')->group(function () {
 
-    // Papar login admin
-    Route::get('/', [AdminAuthController::class, 'showLogin'])
-        ->name('admin.login');
+    // Login admin
+    Route::get('/', [AdminAuthController::class, 'showLogin'])->name('admin.login');
+    Route::post('/login', [AdminAuthController::class, 'login'])->name('admin.login.submit');
 
-    // Proses login admin
-    Route::post('/login', [AdminAuthController::class, 'login'])
-        ->name('admin.login.submit');
-
-    // Admin protected routes
+    // Protected routes
     Route::middleware('admin')->group(function () {
-        Route::get('/dashboard', [AdminDashboardController::class, 'index'])
-            ->name('admin.dashboard');
 
-        Route::post('/logout', [AdminAuthController::class, 'logout'])
-            ->name('admin.logout');
+        // Dashboard
+        Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
+
+        // Logout
+        Route::post('/logout', [AdminAuthController::class, 'logout'])->name('admin.logout');
+
+        // Event Managers
+        Route::get('/event-managers', [EventManagerController::class, 'index'])->name('admin.event-managers.index');
+        Route::get('/event-managers/create', [EventManagerController::class, 'create'])->name('admin.event-managers.create');
+        Route::post('/event-managers', [EventManagerController::class, 'store'])->name('admin.event-managers.store');
     });
-
 });
