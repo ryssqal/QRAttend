@@ -18,7 +18,7 @@ class ProfileController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'profile_photo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'avatar' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
         $user = Auth::user();
@@ -26,17 +26,17 @@ class ProfileController extends Controller
         // Update name
         $user->name = $request->name;
 
-        // Handle profile photo upload
-        if ($request->hasFile('profile_photo')) {
-            // Delete old photo if exists
-            if ($user->profile_photo && Storage::disk('public')->exists('profiles/' . $user->profile_photo)) {
-                Storage::disk('public')->delete('profiles/' . $user->profile_photo);
+        // Handle avatar upload
+        if ($request->hasFile('avatar')) {
+            // Delete old avatar if exists
+            if ($user->avatar && file_exists(public_path($user->avatar))) {
+                unlink(public_path($user->avatar));
             }
 
-            // Store new photo
-            $fileName = time() . '.' . $request->profile_photo->extension();
-            $request->profile_photo->storeAs('profiles', $fileName, 'public');
-            $user->profile_photo = $fileName;
+            // Store new avatar
+            $filename = time() . '_' . $request->file('avatar')->getClientOriginalName();
+            $request->file('avatar')->move(public_path('uploads/avatars'), $filename);
+            $user->avatar = 'uploads/avatars/' . $filename;
         }
 
         $user->save();

@@ -132,6 +132,9 @@
                 </div>
             </div>
         </div>
+        <br>
+        <br>
+        <br>
     </section>
 
 
@@ -237,9 +240,10 @@
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    location.reload();
+                    // ✅ AUTO REDIRECT KE MyQR
+                    window.location.href = '/client/myqr';
                 } else {
-                    console.log(data.message);
+                    alert(data.message ?? 'Failed to join event');
                 }
             })
             .catch(error => {

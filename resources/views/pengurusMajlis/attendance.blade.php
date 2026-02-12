@@ -1,6 +1,42 @@
 @extends('layouts.app')
 
 @section('content')
+<style>
+@media print {
+    header,
+    .header,
+    .navbar {
+        position: static !important;
+        margin-bottom: 10px !important;
+    }
+
+    body {
+        background: white;
+        margin-top: 0 !important;
+    }
+
+    button, #qr-reader, #start-scan, #stop-scan {
+        display: none !important;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    th, td {
+        border: 1px solid #000;
+        padding: 6px;
+        font-size: 12px;
+    }
+
+    h1, h2, h3 {
+        color: black !important;
+        page-break-after: avoid;
+    }
+}
+</style>
+
 <meta name="csrf-token" content="{{ csrf_token() }}">
 <div class="min-h-screen bg-gray-50 py-8">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -35,6 +71,7 @@
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Check-in Time</th>
                                 </tr>
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-200" id="attendance-table">
@@ -47,8 +84,15 @@
                                             {{ isset($attendances[$participant->user->id]) && $attendances[$participant->user->id]->status == 'Present'
                                                 ? 'bg-green-100 text-green-800'
                                                 : 'bg-red-100 text-red-800' }}">
-                                            {{ isset($attendances[$participant->user->id]) ? $attendances[$participant->user->id]->status : 'Missing' }}
+                                            {{ isset($attendances[$participant->user->id]) 
+                                                ? $attendances[$participant->user->id]->status 
+                                                : 'Missing' }}
                                         </span>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 check-in-time">
+                                        {{ isset($attendances[$participant->user->id]) && $attendances[$participant->user->id]->check_in_time
+                                            ? $attendances[$participant->user->id]->check_in_time->format('H:i:s')
+                                            : '-' }}
                                     </td>
                                 </tr>
                                 @endforeach
@@ -73,6 +117,12 @@
                         <div class="flex justify-between">
                             <span class="text-sm text-gray-600">Missing</span>
                             <span class="text-sm font-medium text-red-600" id="total-missing">{{ $totalMissing }}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <button onclick="window.print()"
+                                class="mb-4 bg-gray-800 text-white px-4 py-2 rounded-lg hover:bg-black">
+                                🖨️ Print Attendance
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -182,7 +232,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const data = await response.json();
             if (response.ok && data.success) {
                 showResult('✅ ' + data.message, 'success');
-                updateAttendanceTable(data.participant_id);
+                updateAttendanceTable(data.participant_id, data.check_in_time);
                 setTimeout(resumeScanning, 2000);
             } else {
                 showResult('❌ ' + (data.error || 'Ralat'), 'error');
@@ -203,23 +253,27 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    function updateAttendanceTable(userId) {
-        const row = document.querySelector(`tr[data-participant-id="${userId}"]`);
-        if (!row) return;
-        
-        const badge = row.querySelector('.status-badge');
-        // Hanya update jika status belum Present
-        if (!badge.classList.contains('bg-green-100')) {
-            badge.className = 'status-badge px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800';
-            badge.textContent = 'Present';
-            
-            // Update summary UI
-            const pres = document.getElementById('total-present');
-            const miss = document.getElementById('total-missing');
-            if(pres) pres.textContent = parseInt(pres.textContent) + 1;
-            if(miss) miss.textContent = Math.max(0, parseInt(miss.textContent) - 1);
+    function updateAttendanceTable(userId, checkInTime) {
+    const row = document.querySelector(`tr[data-participant-id="${userId}"]`);
+    if (!row) return;
+
+    const badge = row.querySelector('.status-badge');
+    if (!badge.classList.contains('bg-green-100')) {
+        badge.className = 'status-badge px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800';
+        badge.textContent = 'Present';
+
+        // Update check-in column
+        const checkInCell = row.querySelector('.check-in-time');
+        if (checkInCell) checkInCell.textContent = checkInTime || '-';
+
+        // Update summary counters
+        const pres = document.getElementById('total-present');
+        const miss = document.getElementById('total-missing');
+        if(pres) pres.textContent = parseInt(pres.textContent) + 1;
+        if(miss) miss.textContent = Math.max(0, parseInt(miss.textContent) - 1);
         }
     }
+
 
     function showResult(msg, type) {
         scanResult.textContent = msg;

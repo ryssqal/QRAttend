@@ -1,31 +1,27 @@
-# TODO: Create Account Settings Page for Event Manager
+# Migration Plan: Move Image Handling from public/storage to public/uploads
 
-## Migration
-- [ ] Create migration to add 'profile_photo' column to users table
+## Information Gathered
+- Event images are already saved to public/uploads with media_path = 'uploads/filename', but views incorrectly use asset('storage/' . $event->media_path).
+- User avatars are saved to storage/app/public/avatars and displayed with asset('storage/' . avatar).
+- ProfileController has buggy upload logic for profile photos.
+- PengurusMajlisController uses Storage::disk('public') in destroy method.
+- Views: settings.blade.php and client/home.blade.php use asset('storage/...').
 
-## Model
-- [ ] Update User model to include 'profile_photo' in fillable array
+## Plan
+1. Update ProfileController: Fix upload logic to save to public/uploads/avatars, set avatar = 'uploads/avatars/filename', use direct file operations.
+2. Update PengurusMajlisController: Change destroy method to use file_exists and unlink instead of Storage::disk('public').
+3. Update views: Change asset('storage/' . ...) to appropriate asset for uploads.
+   - For events: asset($event->media_path)
+   - For avatars: asset('uploads/avatars/' . Auth::user()->avatar)
+4. Ensure subfolders: avatars, events (events already use uploads/).
+5. Remove dependency on storage:link and Storage::disk('public').
 
-## Controller
-- [ ] Create ProfileController with update method
-- [ ] Add validation for name (required, string) and image (image, mimes:jpeg,png,jpg, max:2048)
-- [ ] Implement storage logic: store in storage/app/public/profiles, delete old photo if new one uploaded
+## Dependent Files
+- app/Http/Controllers/ProfileController.php
+- app/Http/Controllers/PengurusMajlisController.php
+- resources/views/settings.blade.php
+- resources/views/client/home.blade.php
 
-## Route
-- [ ] Add route for profile settings in web.php (under pengurusMajlis middleware)
-
-## View
-- [ ] Create Blade view for profile settings page with:
-  - Circular profile picture preview
-  - File input for 'Profile Picture' (JPEG, PNG, max 2MB)
-  - Text input for 'Name'
-  - 'Update Profile' button
-
-## Global Display
-- [ ] Update navbar/sidebar to display Auth::user()->name and profile picture
-
-## Storage
-- [ ] Run php artisan storage:link if necessary
-
-## Testing
-- [ ] Test the functionality: upload photo, update name, check display in navbar
+## Followup Steps
+- Test image uploads and displays.
+- Ensure shared hosting compatibility (direct access to public/uploads).

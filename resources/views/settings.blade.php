@@ -52,7 +52,7 @@
                     <label for="avatar" class="block text-sm font-medium text-gray-700 mb-2">Profile Picture</label>
                     <div class="flex items-center space-x-4">
                         @if(Auth::user()->avatar)
-                            <img src="{{ asset('storage/' . Auth::user()->avatar) }}" alt="Current Avatar" class="w-16 h-16 rounded-full object-cover">
+                            <img src="{{ asset('uploads/avatars/' . Auth::user()->avatar) }}" alt="Current Avatar" class="w-16 h-16 rounded-full object-cover">
                         @else
                             <div class="w-16 h-16 bg-gray-300 rounded-full flex items-center justify-center">
                                 <span class="text-gray-600 text-xl">{{ substr(Auth::user()->name, 0, 1) }}</span>

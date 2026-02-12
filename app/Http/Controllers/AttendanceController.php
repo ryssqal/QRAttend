@@ -28,7 +28,7 @@ class AttendanceController extends Controller
         // Ambil data attendance dan key kan dengan user_id
         $attendances = Attendance::where('event_id', $event_id)->get()->keyBy('user_id');
 
-        $totalParticipants = $participants->count();
+        $totalParticipants = $event->pax;
         $totalPresent = $attendances->where('status', 'Present')->count();
         $totalMissing = $totalParticipants - $totalPresent;
 
@@ -63,8 +63,12 @@ class AttendanceController extends Controller
 
         // Check if QR is used or event is inactive
         if ($qr->is_used) {
-            return response()->json(['success' => false, 'error' => 'QR Code ini telah digunakan.'], 409);
+            return response()->json([
+            'success' => false,
+            'error' => 'QR Code ini telah digunakan.'
+            ], 409);
         }
+
 
         // Check if the associated event is still active
         $event = Event::find($eventId);
@@ -78,17 +82,18 @@ class AttendanceController extends Controller
         }
 
         // 5. Rekod Kehadiran (Gunakan nama column 'user_id' mengikut struktur jadual anda)
-        Attendance::updateOrCreate(
-            [
-                'event_id' => $eventId,
-                'user_id'  => $qr->user_id, // Nilai ini sangat penting
-            ],
-            [
-                'status' => 'Present',
-            ]
+        $attendance = Attendance::updateOrCreate(
+        [
+        'event_id' => $eventId,
+        'user_id'  => $qr->user_id,
+        ],
+        [
+        'status' => 'Present',
+        'check_in_time' => now(), // sentiasa update
+        ]
         );
 
-        // 6. Kemaskini status QR
+        // OPTIONAL: kalau QR satu-guna sahaja
         $qr->update([
             'is_used' => true,
             'used_at' => now()
@@ -97,8 +102,10 @@ class AttendanceController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Kehadiran berjaya direkodkan!',
-            'participant_id' => $qr->user_id
+            'participant_id' => $qr->user_id,
+            'check_in_time' => optional($attendance->check_in_time)->format('H:i:s'),
         ]);
+
 
     } catch (\Exception $e) {
         return response()->json(['success' => false, 'error' => 'Ralat: ' . $e->getMessage()], 500);
